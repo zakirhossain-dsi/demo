@@ -1,0 +1,37 @@
+server:
+  port: ${serverPort:8080}
+
+logging:
+  level:
+    root: info
+
+# mandatory database properties
+spring:
+  datasource:
+    url: ${dbURL:jdbc:h2:~/education_management}
+    username: ${dbUserName:sa}
+    password: ${dbPassword:admin}
+    driver-class-name: ${dbDriver:org.h2.Driver}
+
+    # optional database properties
+    #schema: classpath:schema.sql
+    #data: classpath:data.sql
+    #tomcat.max-wait: 20000
+    #tomcat.max-active: 50
+    #tomcat.max-idle: 20
+    #tomcat.min-idle: 15
+
+  jpa:
+    defer-datasource-initialization: true
+    #generate-ddl=true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      javax.persistence.validation.mode: none
+      hibernate:
+        format_sql: true
+        dialect: ${sqlDialect:org.hibernate.dialect.H2Dialect}
+  sql:
+    init:
+      mode: embedded
