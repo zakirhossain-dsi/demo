@@ -35,3 +35,11 @@ spring:
   sql:
     init:
       mode: embedded
+
+  servlet:
+    multipart:
+      enabled: true
+      location: /tmp
+      max-file-size: 10MB
+      max-request-size: 20MB
+      resolve-lazily: false

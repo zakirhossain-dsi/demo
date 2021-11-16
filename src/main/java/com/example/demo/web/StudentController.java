@@ -29,10 +29,12 @@ public class StudentController {
         return ResponseEntity.ok(aStudent);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> createStudent(@RequestBody @Valid Student student){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Student> createStudent(@ModelAttribute @Valid Student student){
         log.info("Got request for creating a student.");
-        Student aStudent = studentService.createStudent(student);
-        return ResponseEntity.ok(aStudent);
+        //Student aStudent = studentService.createStudent(student);
+        student.setProfileImagePath(student.getProfileImage().getOriginalFilename());
+        student.setProfileImage(null);
+        return ResponseEntity.ok(student);
     }
 }
