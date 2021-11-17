@@ -21,7 +21,7 @@ public class StudentEntity {
     @Column
     private String email;
     @Column
-    private String profileImageUrl;
+    private String profileImagePath;
     @Column
     private String department;
 }

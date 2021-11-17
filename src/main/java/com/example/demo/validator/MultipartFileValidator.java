@@ -1,7 +1,7 @@
 package com.example.demo.validator;
 
 import com.example.demo.annotation.MultipartFileValid;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class MultipartFileValidator implements ConstraintValidator<MultipartFileValid, MultipartFile> {
@@ -29,26 +30,19 @@ public class MultipartFileValidator implements ConstraintValidator<MultipartFile
     public boolean isValid(final MultipartFile file, final ConstraintValidatorContext context) {
         var validationStatus = true;
 
-        if(file.getSize() > maxSize){
+        if(Objects.isNull(file) || file.getSize() > maxSize){
             context.buildConstraintViolationWithTemplate(String.format(ERROR_MESSAGE_FILE_SIZE, maxSize / MEGABYTE))
                     .addConstraintViolation();
             validationStatus = false;
         }
 
-        if(!fileTypes.contains(getFileExtension(file))){
+        var fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+        if(!fileTypes.contains(fileExtension)){
             context.buildConstraintViolationWithTemplate(String.format(ERROR_MESSAGE_FILE_TYPE, fileTypes))
                 .addConstraintViolation();
             validationStatus = false;
         }
         return validationStatus;
-    }
-
-    private String getFileExtension(MultipartFile file){
-
-        var fileName = file.getOriginalFilename();
-        if(StringUtils.isEmpty(fileName)){
-            return "";
-        }
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

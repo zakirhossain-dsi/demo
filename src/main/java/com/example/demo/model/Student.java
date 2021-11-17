@@ -23,7 +23,7 @@ public class Student{
     @Email
     private String email;
 
-    @MultipartFileValid(maxSize = 5, fileTypes = {"jpg", "jpeg", "png"})
+    @MultipartFileValid(maxSize = 5, fileTypes = {"jpeg"})
     private MultipartFile profileImage;
     private String profileImagePath;
     private String department;

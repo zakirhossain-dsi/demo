@@ -39,7 +39,7 @@ spring:
   servlet:
     multipart:
       enabled: true
-      location: /tmp
+#      location: /uploads
       max-file-size: 10MB
       max-request-size: 20MB
       resolve-lazily: false

@@ -4,5 +4,5 @@ import com.example.demo.model.Student;
 
 public interface StudentService {
     Student getStudentById(long studentId);
-    Student createStudent(Student student);
+    Student saveStudent(Student student);
 }
