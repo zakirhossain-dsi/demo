@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,9 +28,7 @@ public class StudentServiceImpl implements StudentService {
         if(possibleStudentEntity.isEmpty()){
             throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", studentId));
         }
-        Student student =  modelMapper.map(possibleStudentEntity.get(), Student.class);
-        student.setProfileImagePath(buildProfileImagePath(student));
-        return student;
+        return modelMapper.map(possibleStudentEntity.get(), Student.class);
     }
 
     @Override
@@ -37,12 +36,16 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
 
         studentEntity = studentDAO.save(studentEntity);
-
         student.setStudentId(studentEntity.getStudentId());
-        student.setProfileImagePath(buildProfileImagePath(student));
-        storageService.store(student.getProfileImagePath(), student.getProfileImage());
 
-        student.setProfileImage(null);
+        if(!Objects.isNull(student.getProfileImage())) {
+            storageService.store(student.getProfileImagePath(), student.getProfileImage());
+            student.setProfileImagePath(buildProfileImagePath(student));
+            studentEntity.setProfileImagePath(student.getProfileImagePath());
+            studentDAO.save(studentEntity);
+            student.setProfileImage(null);
+        }
+
         return student;
     }
 

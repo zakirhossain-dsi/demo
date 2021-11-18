@@ -15,7 +15,7 @@ import java.util.Objects;
 public class MultipartFileValidator implements ConstraintValidator<MultipartFileValid, MultipartFile> {
 
     private static final String ERROR_MESSAGE_FILE_SIZE = "file size should be less than or equal to %s MB";
-    private static final String ERROR_MESSAGE_FILE_TYPE = "Given file type is not supported. Supported file types are %s ";
+    private static final String ERROR_MESSAGE_FILE_TYPE = "file type is not supported. Supported file types are %s ";
     private long maxSize;
     private static final long MEGABYTE = 1024L*1024L;
     private List<String> fileTypes;
@@ -30,7 +30,12 @@ public class MultipartFileValidator implements ConstraintValidator<MultipartFile
     public boolean isValid(final MultipartFile file, final ConstraintValidatorContext context) {
         var validationStatus = true;
 
-        if(Objects.isNull(file) || file.getSize() > maxSize){
+        if(Objects.isNull(file)){
+            // We don't need to validate an empty file.
+            return true;
+        }
+
+        if(file.getSize() > maxSize){
             context.buildConstraintViolationWithTemplate(String.format(ERROR_MESSAGE_FILE_SIZE, maxSize / MEGABYTE))
                     .addConstraintViolation();
             validationStatus = false;
