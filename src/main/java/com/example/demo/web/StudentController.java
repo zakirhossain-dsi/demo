@@ -43,9 +43,10 @@ public class StudentController {
     }
 
     @ResponseBody
-    @GetMapping("/profile-images/{filename:.+}")
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        Resource file = storageService.loadAsResource(String.format("%s/%s", storageProperties.getProfileImageDir(), filename));
+    @GetMapping("{id}/profile-image/{filename:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable long id, @PathVariable String filename) {
+        Student student = studentService.getStudentById(id);
+        Resource file = storageService.loadAsResource(student.getProfileImagePath());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFilename()))
                 .contentType(MediaType.IMAGE_JPEG)
