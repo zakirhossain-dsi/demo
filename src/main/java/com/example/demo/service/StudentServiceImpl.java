@@ -39,9 +39,9 @@ public class StudentServiceImpl implements StudentService {
         student.setStudentId(studentEntity.getStudentId());
 
         if(!Objects.isNull(student.getProfileImage())) {
-            storageService.store(student.getProfileImagePath(), student.getProfileImage());
             student.setProfileImagePath(buildProfileImagePath(student));
             studentEntity.setProfileImagePath(student.getProfileImagePath());
+            storageService.store(student.getProfileImagePath(), student.getProfileImage());
             studentDAO.save(studentEntity);
             student.setProfileImage(null);
         }

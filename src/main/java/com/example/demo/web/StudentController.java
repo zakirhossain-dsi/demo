@@ -1,8 +1,8 @@
 package com.example.demo.web;
 
 import com.example.demo.config.StorageProperties;
-import com.example.demo.constraint.OnCreate;
-import com.example.demo.constraint.OnUpdate;
+import com.example.demo.validation.group.OnCreate;
+import com.example.demo.validation.group.OnUpdate;
 import com.example.demo.model.Student;
 import com.example.demo.service.StorageService;
 import com.example.demo.service.StudentService;
