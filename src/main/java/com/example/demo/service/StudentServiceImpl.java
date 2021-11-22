@@ -22,11 +22,11 @@ public class StudentServiceImpl implements StudentService {
     private final StorageProperties storageProperties;
 
     @Override
-    public Student getStudentById(long studentId) {
+    public Student getStudentById(long Id) {
 
-        Optional<StudentEntity> possibleStudentEntity = studentDAO.findByStudentId(studentId);
+        Optional<StudentEntity> possibleStudentEntity = studentDAO.findById(Id);
         if(possibleStudentEntity.isEmpty()){
-            throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", studentId));
+            throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", Id));
         }
         return modelMapper.map(possibleStudentEntity.get(), Student.class);
     }
@@ -36,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
 
         studentEntity = studentDAO.save(studentEntity);
-        student.setStudentId(studentEntity.getStudentId());
+        student.setId(studentEntity.getId());
 
         if(!Objects.isNull(student.getProfileImage())) {
             student.setProfileImagePath(buildProfileImagePath(student));
@@ -52,7 +52,7 @@ public class StudentServiceImpl implements StudentService {
     private String buildProfileImagePath(Student student){
         return String.format("%s/%s-%s.jpeg",
                 storageProperties.getProfileImageDir(),
-                student.getStudentId(),
+                student.getId(),
                 student.getFirstName());
 
     }

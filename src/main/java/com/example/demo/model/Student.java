@@ -23,7 +23,7 @@ public class Student {
 
     @Null(groups = OnCreate.class)
     @NotNull(groups = OnUpdate.class)
-    private Long studentId;
+    private Long Id;
 
     @NotEmpty
     @Schema(name="firstName", description = "Student first name", required = true)

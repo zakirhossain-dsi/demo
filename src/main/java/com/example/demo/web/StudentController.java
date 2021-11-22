@@ -1,11 +1,10 @@
 package com.example.demo.web;
 
-import com.example.demo.config.StorageProperties;
-import com.example.demo.validation.group.OnCreate;
-import com.example.demo.validation.group.OnUpdate;
 import com.example.demo.model.Student;
 import com.example.demo.service.StorageService;
 import com.example.demo.service.StudentService;
+import com.example.demo.validation.group.OnCreate;
+import com.example.demo.validation.group.OnUpdate;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,6 @@ public class StudentController {
 
     private final StudentService studentService;
     private final StorageService storageService;
-    private  final StorageProperties storageProperties;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> getStudent(@PathVariable("id") long id){
@@ -52,7 +50,7 @@ public class StudentController {
     public ResponseEntity<Student> updateStudent(@PathVariable Long id, @ModelAttribute @Valid Student student){
         log.info("Got request for updating a student.");
 
-        if(!Objects.equals(id, student.getStudentId())){
+        if(!Objects.equals(id, student.getId())){
             throw new IllegalArgumentException("Student id in path variable and request body should be the same.");
         }
 

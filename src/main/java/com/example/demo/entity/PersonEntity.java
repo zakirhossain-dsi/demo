@@ -8,11 +8,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "person")
-public class PersonEntity {
+public class PersonEntity extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long personId;
     @Column
     private String firstName;
     @Column
