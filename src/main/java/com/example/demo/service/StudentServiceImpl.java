@@ -22,11 +22,11 @@ public class StudentServiceImpl implements StudentService {
     private final StorageProperties storageProperties;
 
     @Override
-    public Student getStudentById(long Id) {
+    public Student getStudentById(long id) {
 
-        Optional<StudentEntity> possibleStudentEntity = studentDAO.findById(Id);
+        Optional<StudentEntity> possibleStudentEntity = studentDAO.findById(id);
         if(possibleStudentEntity.isEmpty()){
-            throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", Id));
+            throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", id));
         }
         return modelMapper.map(possibleStudentEntity.get(), Student.class);
     }
