@@ -7,6 +7,8 @@ logging:
 
 # mandatory database properties
 spring:
+  jackson:
+    date-format: yyyy-MM-dd
   datasource:
     url: ${dbURL:jdbc:h2:~/education_management}
     username: ${dbUserName:sa}

@@ -3,6 +3,7 @@ package com.example.demo.model;
 import com.example.demo.annotation.MultipartFileValid;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,6 +15,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -45,4 +48,9 @@ public class Student {
 
     @Valid
     private List<Document> documents;
+
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private LocalDateTime dateOfBirth = LocalDateTime.now();
+
+    private Date dateOfAdmission = new Date();
 }

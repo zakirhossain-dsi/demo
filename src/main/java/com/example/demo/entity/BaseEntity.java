@@ -5,8 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
-@MappedSuperclass
 @Data
+@MappedSuperclass
 public class BaseEntity {
 
     @Id
