@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.config.StorageProperties;
 import com.example.demo.entity.StudentEntity;
+import com.example.demo.model.BaseModel;
+import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
 import com.example.demo.repository.StudentDAO;
 import lombok.AllArgsConstructor;
@@ -20,15 +22,24 @@ public class StudentServiceImpl implements StudentService {
     private final ModelMapper modelMapper;
     private final StorageService storageService;
     private final StorageProperties storageProperties;
+    private final RedisService cacheService;
 
     @Override
     public Student getStudentById(long id) {
+        Student student = (Student) cacheService.getModel(ModelType.STUDENT, id);
+        if(!Objects.isNull(student)){
+            return student;
+        }
 
         Optional<StudentEntity> possibleStudentEntity = studentDAO.findById(id);
         if(possibleStudentEntity.isEmpty()){
             throw new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", id));
         }
-        return modelMapper.map(possibleStudentEntity.get(), Student.class);
+
+        student = modelMapper.map(possibleStudentEntity.get(), Student.class);
+
+        cacheService.saveModel(student);
+        return student;
     }
 
     @Override

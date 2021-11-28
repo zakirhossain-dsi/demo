@@ -5,6 +5,10 @@ logging:
   level:
     root: info
 
+redis:
+  hostName: ${redisHostName:localhost}
+  port: ${redisPort:6379}
+
 # mandatory database properties
 spring:
   jackson:

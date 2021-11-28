@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -22,11 +21,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Student {
-
-    @Null(groups = OnCreate.class)
-    @NotNull(groups = OnUpdate.class)
-    private Long id;
+public class Student extends BaseModel {
 
     @NotEmpty
     @Schema(name="firstName", description = "Student first name", required = true)
@@ -53,4 +48,9 @@ public class Student {
     private LocalDateTime dateOfBirth = LocalDateTime.now();
 
     private Date dateOfAdmission = new Date();
+
+    @Override
+    public ModelType getModelType() {
+        return ModelType.STUDENT;
+    }
 }
