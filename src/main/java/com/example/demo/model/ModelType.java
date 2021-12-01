@@ -1,5 +1,5 @@
 package com.example.demo.model;
 
 public enum ModelType {
-    STUDENT, PERSON;
+    STUDENT, PERSON, COURSE;
 }

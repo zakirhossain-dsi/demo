@@ -1,20 +1,18 @@
 package com.example.demo.model;
 
-import com.example.demo.validation.group.OnCreate;
-import com.example.demo.validation.group.OnUpdate;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 public abstract class BaseModel implements Serializable {
 
-    @Null(groups = OnCreate.class)
-    @NotNull(groups = OnUpdate.class)
-    protected Long id;
+    protected Date createDate = new Date();
+    protected Date updateDate = new Date();
+    protected String createdBy = "zakir@gmail.com";
+    protected String updatedBy = "zakir@gmail.com";
 
     public abstract ModelType getModelType();
-
+    public abstract Long getId();
 }

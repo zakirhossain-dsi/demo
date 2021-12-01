@@ -12,7 +12,7 @@ redis:
 # mandatory database properties
 spring:
   jackson:
-    date-format: yyyy-MM-dd
+    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     url: ${dbURL:jdbc:h2:~/education_management}
     username: ${dbUserName:sa}

@@ -9,20 +9,15 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true, length = 20)
-    protected long id;
+    @Column(updatable=false)
+    protected Date createDate = new Date();
 
     @Column
-    protected Date createDate;
+    protected Date updateDate = new Date();
+
+    @Column(updatable=false)
+    protected String createdBy = "zakir@gmail.com";
 
     @Column
-    protected Date updateDate;
-
-    @Column
-    protected String createdBy;
-
-    @Column
-    protected String updatedBy;
+    protected String updatedBy = "zakir@gmail.com";
 }

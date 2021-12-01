@@ -29,10 +29,10 @@ public class StudentController {
     private final StudentService studentService;
     private final StorageService storageService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> getStudent(@PathVariable("id") long id){
-        log.info("Got request for student id: {}", id);
-        Student aStudent = studentService.getStudentById(id);
+    @GetMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Student> getStudent(@PathVariable Long studentId){
+        log.info("Got request for student id: {}", studentId);
+        Student aStudent = studentService.getStudentById(studentId);
         return ResponseEntity.ok(aStudent);
     }
 
@@ -41,27 +41,27 @@ public class StudentController {
     public ResponseEntity<Student> createStudent(@ModelAttribute @Valid Student student){
         log.info("Got request for creating a student.");
 
-        Student aStudent = studentService.saveStudent(student);
+        Student aStudent = studentService.insertStudent(student);
         return ResponseEntity.ok(aStudent);
     }
 
     @Validated(OnUpdate.class)
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @ModelAttribute @Valid Student student){
+    @PutMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Student> updateStudent(@PathVariable Long studentId, @ModelAttribute @Valid Student student){
         log.info("Got request for updating a student.");
 
-        if(!Objects.equals(id, student.getId())){
+        if(!Objects.equals(studentId, student.getStudentId())){
             throw new IllegalArgumentException("Student id in path variable and request body should be the same.");
         }
 
-        Student aStudent = studentService.saveStudent(student);
+        Student aStudent = studentService.updateStudent(student);
         return ResponseEntity.ok(aStudent);
     }
 
     @ResponseBody
-    @GetMapping("{id}/profile-image/{filename:.+}")
-    public ResponseEntity<Resource> serveFile(@PathVariable long id, @PathVariable String filename) {
-        Student student = studentService.getStudentById(id);
+    @GetMapping("{studentId}/profile-image/{filename:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable Long studentId, @PathVariable String filename) {
+        Student student = studentService.getStudentById(studentId);
         Resource file = storageService.loadAsResource(student.getProfileImagePath());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s\"", file.getFilename()))

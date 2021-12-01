@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.config.StorageProperties;
 import com.example.demo.entity.StudentEntity;
-import com.example.demo.model.BaseModel;
 import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
 import com.example.demo.repository.StudentDAO;
@@ -25,7 +24,7 @@ public class StudentServiceImpl implements StudentService {
     private final RedisService cacheService;
 
     @Override
-    public Student getStudentById(long id) {
+    public Student getStudentById(Long id) {
         Student student = (Student) cacheService.getModel(ModelType.STUDENT, id);
         if(!Objects.isNull(student)){
             return student;
@@ -38,16 +37,45 @@ public class StudentServiceImpl implements StudentService {
 
         student = modelMapper.map(possibleStudentEntity.get(), Student.class);
 
-        cacheService.saveModel(student);
+        // cacheService.saveModel(student);
         return student;
     }
 
     @Override
-    public Student saveStudent(Student student){
+    public Student insertStudent(Student student){
+
         StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
+        studentEntity.setCourseRatings(null);
+        studentEntity = studentDAO.save(studentEntity);
+
+        studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
+
+        if(!Objects.isNull(studentEntity.getCourseRatings())){
+            studentEntity = studentDAO.save(studentEntity);
+        }
+
+        student.setStudentId(studentEntity.getStudentId());
+
+        if(!Objects.isNull(student.getProfileImage())) {
+            student.setProfileImagePath(buildProfileImagePath(student));
+            studentEntity.setProfileImagePath(student.getProfileImagePath());
+            storageService.store(student.getProfileImagePath(), student.getProfileImage());
+            studentDAO.save(studentEntity);
+            student.setProfileImage(null);
+        }
+
+        return student;
+    }
+
+    @Override
+    public Student updateStudent(Student student){
+
+        getStudentById(student.getStudentId());
+
+        StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
+        studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
 
         studentEntity = studentDAO.save(studentEntity);
-        student.setId(studentEntity.getId());
 
         if(!Objects.isNull(student.getProfileImage())) {
             student.setProfileImagePath(buildProfileImagePath(student));
@@ -63,7 +91,7 @@ public class StudentServiceImpl implements StudentService {
     private String buildProfileImagePath(Student student){
         return String.format("%s/%s-%s.jpeg",
                 storageProperties.getProfileImageDir(),
-                student.getId(),
+                student.getStudentId(),
                 student.getFirstName());
 
     }

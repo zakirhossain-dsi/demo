@@ -10,6 +10,11 @@ import javax.persistence.*;
 @Table(name = "person")
 public class PersonEntity extends BaseEntity{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, length = 20)
+    protected long personId;
+
     @Column
     private String firstName;
     @Column
