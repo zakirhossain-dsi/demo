@@ -37,7 +37,7 @@ public class StudentServiceImpl implements StudentService {
 
         student = modelMapper.map(possibleStudentEntity.get(), Student.class);
 
-        // cacheService.saveModel(student);
+         cacheService.saveModel(student);
         return student;
     }
 
@@ -45,12 +45,10 @@ public class StudentServiceImpl implements StudentService {
     public Student insertStudent(Student student){
 
         StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
-        studentEntity.setCourseRatings(null);
         studentEntity = studentDAO.save(studentEntity);
 
-        studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
-
-        if(!Objects.isNull(studentEntity.getCourseRatings())){
+        if(!Objects.isNull(student.getCourseRatings())){
+            studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
             studentEntity = studentDAO.save(studentEntity);
         }
 
@@ -70,9 +68,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student updateStudent(Student student){
 
-        getStudentById(student.getStudentId());
+        Optional<StudentEntity> possibleStudentEntity = studentDAO.findById(student.getStudentId());
 
-        StudentEntity studentEntity = modelMapper.map(student, StudentEntity.class);
+        StudentEntity studentEntity = possibleStudentEntity.orElseThrow(()->
+            new EntityNotFoundException(String.format("Student was not found for parameters {id=%s}", student.getStudentId()))
+        );
+
         studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
 
         studentEntity = studentDAO.save(studentEntity);
@@ -84,6 +85,8 @@ public class StudentServiceImpl implements StudentService {
             studentDAO.save(studentEntity);
             student.setProfileImage(null);
         }
+
+        cacheService.deleteKey(student.getModelType(), student.getStudentId());
 
         return student;
     }

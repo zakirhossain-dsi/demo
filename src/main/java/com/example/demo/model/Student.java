@@ -77,7 +77,6 @@ public class Student extends BaseModel {
         if(Objects.isNull(this.getCourseRatings())
                 || Objects.isNull(studentEntity.getStudentId())
                 || studentEntity.getStudentId() <= 0) {
-
             return Collections.emptySet();
         }
 

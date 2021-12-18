@@ -2,17 +2,16 @@ package com.example.demo.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
 @Entity
@@ -42,4 +41,13 @@ public class StudentEntity extends BaseEntity {
     //@OneToMany(mappedBy = "courseRatingKey.studentEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OneToMany(mappedBy = "courseRatingKey.studentEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CourseRatingEntity> courseRatings;
+
+    public StudentEntity(){
+        this.courseRatings = new HashSet<>();
+    }
+
+    public void setCourseRatings(Set<CourseRatingEntity> courseRatings){
+        this.courseRatings.clear();
+        this.courseRatings.addAll(courseRatings);
+    }
 }

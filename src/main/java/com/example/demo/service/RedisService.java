@@ -27,4 +27,8 @@ public class RedisService{
     public BaseModel getModel(ModelType modelType, long modelId) {
         return valueOperations.get(ModelUtils.getKey(modelType, modelId));
     }
+
+    public void deleteKey(ModelType modelType, long modelId){
+        redisTemplate.delete(ModelUtils.getKey(modelType, modelId));
+    }
 }
