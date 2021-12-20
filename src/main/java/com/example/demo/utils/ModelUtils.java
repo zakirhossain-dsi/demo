@@ -5,7 +5,7 @@ import com.example.demo.model.ModelType;
 
 public class ModelUtils {
 
-    private ModelUtils(){
+    private ModelUtils() {
 
     }
 
