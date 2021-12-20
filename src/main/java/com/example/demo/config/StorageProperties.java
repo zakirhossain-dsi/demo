@@ -7,6 +7,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private final String filesDir = "files";
-    private final String profileImageDir = "profile-images";
+    private StorageProperties(){
+
+    }
+
+    private static final String FILES_DIR = "files";
+    private static final String PROFILE_IMAGE_DIR = "profile-images";
 }
