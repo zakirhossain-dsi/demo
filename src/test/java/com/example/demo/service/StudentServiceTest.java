@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class StudentServiceTest {
 
-    //@Test
+    @Test
     void testStudentService() {
-        assertNotNull(new Object());
+        assertNotNull(null);
     }
 }
