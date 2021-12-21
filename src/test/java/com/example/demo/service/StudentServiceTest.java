@@ -10,5 +10,6 @@ class StudentServiceTest {
     @Test
     void testStudentService() {
         assertNotNull(new Object());
+
     }
 }
