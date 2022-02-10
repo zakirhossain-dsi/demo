@@ -15,5 +15,5 @@ public interface StudentService {
 
   Student updateStudent(Student student);
 
-  List<StudentCourseRating> getCourseRatingsByStudentId(Long studentId);
+  List<StudentCourseRating> getStudentCourseRatingsPerStudentId(Long studentId);
 }

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -136,17 +135,7 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public List<StudentCourseRating> getCourseRatingsByStudentId(Long studentId) {
-    List<Object[]> objects = studentDAO.getCourseRatingsByStudentId(studentId);
-    return objects.stream()
-        .map(
-            object ->
-                new StudentCourseRating(
-                    String.valueOf(object[0]),
-                    String.valueOf(object[1]),
-                    String.valueOf(object[2]),
-                    String.valueOf(object[3]),
-                    (Integer) object[4]))
-        .collect(Collectors.toList());
+  public List<StudentCourseRating> getStudentCourseRatingsPerStudentId(Long studentId) {
+    return studentDAO.findStudentCourseRatingsPerStudentId(studentId);
   }
 }

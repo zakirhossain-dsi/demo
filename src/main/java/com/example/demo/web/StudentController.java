@@ -84,7 +84,7 @@ public class StudentController {
   public ResponseEntity<List<StudentCourseRating>> courseRatingsByStudentId(
       @PathVariable Long studentId) {
     List<StudentCourseRating> studentCourseRatings =
-        studentService.getCourseRatingsByStudentId(studentId);
+        studentService.getStudentCourseRatingsPerStudentId(studentId);
 
     return ResponseEntity.ok(studentCourseRatings);
   }
