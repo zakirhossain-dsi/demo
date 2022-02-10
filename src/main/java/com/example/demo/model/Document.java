@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Document {
 
-    @Schema(name="fileType", description = "fileType specifies which document it is", required = true)
     @NotNull
+    @Schema(name="fileType", description = "fileType specifies which document it is", required = true)
     private FileType fileType;
 
     @Schema(name="file", description = "The actual file", required = true)

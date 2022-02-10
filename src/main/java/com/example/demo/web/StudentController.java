@@ -5,6 +5,7 @@ import com.example.demo.service.StorageService;
 import com.example.demo.service.StudentService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
+import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -31,9 +33,18 @@ public class StudentController {
 
     @GetMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> getStudent(@PathVariable Long studentId){
+
         log.info("Got request for student id: {}", studentId);
         Student aStudent = studentService.getStudentById(studentId);
         return ResponseEntity.ok(aStudent);
+    }
+
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Tuple[]> getStudents(@RequestParam Map<String, String> queryParams){
+
+        log.info("Got request for students with params: {}", queryParams);
+        Tuple[] students = studentService.getStudentsByQueryParam(queryParams);
+        return ResponseEntity.ok(students);
     }
 
     @Validated(OnCreate.class)

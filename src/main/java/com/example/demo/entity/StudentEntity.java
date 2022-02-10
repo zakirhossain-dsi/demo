@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.StudentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,6 +23,10 @@ public class StudentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="student_id", nullable = false, unique = true, length = 20)
     protected Long studentId;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private StudentType studentType;
 
     @Column
     private String firstName;

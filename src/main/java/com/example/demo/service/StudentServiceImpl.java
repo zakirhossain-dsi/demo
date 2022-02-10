@@ -1,15 +1,22 @@
 package com.example.demo.service;
 
 import com.example.demo.config.StorageProperties;
+import com.example.demo.entity.QStudentEntity;
 import com.example.demo.entity.StudentEntity;
 import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
 import com.example.demo.repository.StudentDAO;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,6 +29,7 @@ public class StudentServiceImpl implements StudentService {
     private final StorageService storageService;
     private final StorageProperties storageProperties;
     private final RedisService cacheService;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Student getStudentById(Long id) {
@@ -39,6 +47,30 @@ public class StudentServiceImpl implements StudentService {
 
          cacheService.saveModel(student);
         return student;
+    }
+
+    @Override
+    public Tuple[] getStudentsByQueryParam(Map<String, String> queryParams) {
+        QStudentEntity student = QStudentEntity.studentEntity;
+        NumberPath<Long> count = Expressions.numberPath(Long.class, "c");
+
+        /*
+        List<StudentEntity> studentEntities = queryFactory.selectFrom(student)
+                .where(student.lastName.eq("hossain"))
+                .orderBy(student.createDate.asc(), student.email.asc())
+                .fetch();
+        return modelMapper.map(studentEntities, Student[].class);
+        */
+
+        List<Tuple> studentEntities =
+                queryFactory.select(student.lastName, student.studentId.count().as(count))
+                .from(student)
+                .groupBy(student.lastName)
+                .where(student.lastName.eq("hossain"))
+                .orderBy(count.desc())
+                .fetch();
+
+        return modelMapper.map(studentEntities, Tuple[].class);
     }
 
     @Override
