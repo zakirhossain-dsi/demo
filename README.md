@@ -18,3 +18,6 @@ http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-confi
    -e sqlDialect=org.hibernate.dialect.MySQL8Dialect \
    --rm demo-app:v1
 </pre>
+
+# How to format code using git-code-format plugin
+`mvn git-code-format:format-code -Dgcf.globPattern=**/*`

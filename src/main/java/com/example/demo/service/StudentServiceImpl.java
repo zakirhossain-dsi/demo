@@ -5,6 +5,7 @@ import com.example.demo.entity.QStudentEntity;
 import com.example.demo.entity.StudentEntity;
 import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
+import com.example.demo.model.StudentCourseRating;
 import com.example.demo.repository.StudentDAO;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -131,5 +133,20 @@ public class StudentServiceImpl implements StudentService {
     return String.format(
         "%s/%s-%s.jpeg",
         storageProperties.getProfileImageDir(), student.getStudentId(), student.getFirstName());
+  }
+
+  @Override
+  public List<StudentCourseRating> getCourseRatingsByStudentId(Long studentId) {
+    List<Object[]> objects = studentDAO.getCourseRatingsByStudentId(studentId);
+    return objects.stream()
+        .map(
+            object ->
+                new StudentCourseRating(
+                    String.valueOf(object[0]),
+                    String.valueOf(object[1]),
+                    String.valueOf(object[2]),
+                    String.valueOf(object[3]),
+                    (Integer) object[4]))
+        .collect(Collectors.toList());
   }
 }

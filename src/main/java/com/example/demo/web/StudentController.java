@@ -1,12 +1,14 @@
 package com.example.demo.web;
 
 import com.example.demo.model.Student;
+import com.example.demo.model.StudentCourseRating;
 import com.example.demo.service.StorageService;
 import com.example.demo.service.StudentService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
 import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -75,6 +77,16 @@ public class StudentController {
 
     Student aStudent = studentService.updateStudent(student);
     return ResponseEntity.ok(aStudent);
+  }
+
+  @ResponseBody
+  @GetMapping("/course-ratings/{studentId}")
+  public ResponseEntity<List<StudentCourseRating>> courseRatingsByStudentId(
+      @PathVariable Long studentId) {
+    List<StudentCourseRating> studentCourseRatings =
+        studentService.getCourseRatingsByStudentId(studentId);
+
+    return ResponseEntity.ok(studentCourseRatings);
   }
 
   @ResponseBody
