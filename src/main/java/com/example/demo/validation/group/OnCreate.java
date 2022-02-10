@@ -1,4 +1,3 @@
 package com.example.demo.validation.group;
 
-public interface OnCreate {
-}
+public interface OnCreate {}
