@@ -136,6 +136,6 @@ public class StudentServiceImpl implements StudentService {
 
   @Override
   public List<StudentCourseRating> getStudentCourseRatingsPerStudentId(Long studentId) {
-    return studentDAO.findStudentCourseRatingsPerStudentId(studentId);
+    return studentDAO.findStudentCourseRatingsPerStudentId1(studentId);
   }
 }

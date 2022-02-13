@@ -24,4 +24,8 @@ public interface StudentDAO extends CrudRepository<StudentEntity, Long> {
               + "WHERE student.studentId = :studentId")
   List<StudentCourseRating> findStudentCourseRatingsPerStudentId(
       @Param("studentId") Long studentId);
+
+  @Query(nativeQuery = true)
+  List<StudentCourseRating> findStudentCourseRatingsPerStudentId1(
+      @Param("studentId") Long studentId);
 }
