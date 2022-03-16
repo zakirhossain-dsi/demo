@@ -1,4 +1,4 @@
-package com.example.demo.service;
+/*package com.example.demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,4 +12,4 @@ class StudentServiceTest {
   void testStudentService() {
     assertNotNull(new Object());
   }
-}
+}*/
