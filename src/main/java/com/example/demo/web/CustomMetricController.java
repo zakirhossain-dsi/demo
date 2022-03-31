@@ -2,6 +2,8 @@ package com.example.demo.web;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.SecureRandom;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
@@ -18,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomMetricController {
 
   @Getter private final MeterRegistry meterRegistry;
-  private final Random random;
+  private final SecureRandom random;
 
   public CustomMetricController(MeterRegistry meterRegistry) {
     this.meterRegistry = meterRegistry;
-    random = new Random();
+    random = new SecureRandom();
   }
 
   @PostConstruct
