@@ -37,7 +37,7 @@ jobs:
         echo ::set-output name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
         echo ::set-output name=VERSION::${VERSION}
 
-    - name: Image digest
+    - name: Image Version
       run: echo ${{ steps.prep.outputs.VERSION }}
 
     - name: Build and Push Docker Image
