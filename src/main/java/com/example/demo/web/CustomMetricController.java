@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomMetricController {
 
   @Getter private final MeterRegistry meterRegistry;
+  private final Random random;
 
   public CustomMetricController(MeterRegistry meterRegistry) {
     this.meterRegistry = meterRegistry;
+    random = new Random();
   }
 
   @PostConstruct
@@ -40,10 +42,9 @@ public class CustomMetricController {
   public ResponseEntity<String> getCourse() throws InterruptedException {
     log.info("Got request for migrating students.");
 
-    Random random = new Random();
     for (int i = 0; i < 100; i++) {
       int randomNumber = random.nextInt(100);
-      int sleepTime = random.nextInt(10);
+      long sleepTime = random.nextInt(10);
       if (randomNumber % 2 == 0) {
         Counter successCounter = meterRegistry.counter("migration.success", "type", "demo");
         successCounter.increment();
