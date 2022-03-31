@@ -2,6 +2,8 @@ package com.example.demo.web;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Random;
+import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -10,52 +12,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import java.util.Random;
-
 @Slf4j
 @RestController
 @RequestMapping("/migration")
 public class CustomMetricController {
 
-    @Getter
-    private final MeterRegistry meterRegistry;
+  @Getter private final MeterRegistry meterRegistry;
 
-    public CustomMetricController(MeterRegistry meterRegistry) {
-        this.meterRegistry = meterRegistry;
+  public CustomMetricController(MeterRegistry meterRegistry) {
+    this.meterRegistry = meterRegistry;
+  }
+
+  @PostConstruct
+  public void initializeMetrics() {
+    Counter.builder("migration.success")
+        .description("Number of successful migration")
+        .tags("type", "demo")
+        .register(meterRegistry);
+
+    Counter.builder("migration.failure")
+        .description("Number of failed migration")
+        .tags("type", "demo")
+        .register(meterRegistry);
+  }
+
+  @GetMapping(value = "/student", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> getCourse() throws InterruptedException {
+    log.info("Got request for migrating students.");
+
+    Random random = new Random();
+    for (int i = 0; i < 100; i++) {
+      int randomNumber = random.nextInt(100);
+      int sleepTime = random.nextInt(10);
+      if (randomNumber % 2 == 0) {
+        Counter successCounter = meterRegistry.counter("migration.success", "type", "demo");
+        successCounter.increment();
+        System.out.println("Even - " + randomNumber);
+      } else {
+        Counter failureCounter = meterRegistry.counter("migration.failure", "type", "demo");
+        failureCounter.increment();
+        System.out.println("Odd - " + randomNumber);
+      }
+      Thread.sleep(sleepTime * 1000);
     }
-
-    @PostConstruct
-    public void initializeMetrics() {
-        Counter.builder("migration.success")
-                .description("Number of successful migration")
-                .tags("type", "demo").register(meterRegistry);
-
-        Counter.builder("migration.failure")
-                .description("Number of failed migration")
-                .tags("type", "demo").register(meterRegistry);
-
-    }
-
-    @GetMapping(value = "/student", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getCourse() throws InterruptedException {
-        log.info("Got request for migrating students.");
-
-        Random random = new Random();
-        for(int i = 0; i < 100; i++){
-            int randomNumber = random.nextInt(100);
-            int sleepTime = random.nextInt(10);
-            if(randomNumber % 2 == 0){
-                Counter successCounter = meterRegistry.counter("migration.success", "type", "demo");
-                successCounter.increment();
-                System.out.println("Even - " + randomNumber);
-            }else {
-                Counter failureCounter = meterRegistry.counter("migration.failure", "type", "demo");
-                failureCounter.increment();
-                System.out.println("Odd - " + randomNumber);
-            }
-            Thread.sleep(sleepTime*1000);
-        }
-        return ResponseEntity.ok("Migration has been done successfully.");
-    }
+    return ResponseEntity.ok("Migration has been done successfully.");
+  }
 }
