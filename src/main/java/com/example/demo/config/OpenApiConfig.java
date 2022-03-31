@@ -10,18 +10,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .components(new Components())
-                .info(new Info()
-                        .title("Example API")
-                        .description("It is an example resource server.")
-                );
-    }
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .components(new Components())
+        .info(new Info().title("Example API").description("It is an example resource server."));
+  }
 
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
-    }
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
 }

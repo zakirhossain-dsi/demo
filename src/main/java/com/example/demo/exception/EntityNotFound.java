@@ -6,12 +6,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EntityNotFound extends Exception {
-    private int status;
-    private String message;
+  private int status;
+  private String message;
 
-    public EntityNotFound(int status, String message) {
-        super(message);
-        this.status = status;
-        this.message = message;
-    }
+  public EntityNotFound(int status, String message) {
+    super(message);
+    this.status = status;
+    this.message = message;
+  }
 }
