@@ -63,14 +63,14 @@ public class StudentEntity extends BaseEntity {
       mappedBy = "courseRatingKey.studentEntity",
       cascade = CascadeType.ALL,
       orphanRemoval = true)
-  private Set<CourseRatingEntity> courseRatings;
+  private Set<CourseRatingEntity> courseRatingList;
 
   public StudentEntity() {
-    this.courseRatings = new HashSet<>();
+    this.courseRatingList = new HashSet<>();
   }
 
-  public void setCourseRatings(Set<CourseRatingEntity> courseRatings) {
-    this.courseRatings.clear();
-    this.courseRatings.addAll(courseRatings);
+  public void setCourseRatingList(Set<CourseRatingEntity> courseRatings) {
+    this.courseRatingList.clear();
+    this.courseRatingList.addAll(courseRatings);
   }
 }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="teacher_class_schedule_detail" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fcc21901-33b2-419a-9d20-1463118b9221">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="420"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="567"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+
+
+	<field name="employeeName" class="java.lang.String">
+		<fieldDescription><![CDATA[employeeName]]></fieldDescription>
+	</field>
+	<field name="note" class="java.lang.String">
+		<fieldDescription><![CDATA[note]]></fieldDescription>
+	</field>
+	<field name="classPeriodNameBn" class="java.lang.String">
+		<fieldDescription><![CDATA[classPeriodNameBn]]></fieldDescription>
+	</field>
+	<field name="isBreak" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[isBreak]]></fieldDescription>
+	</field>
+	<field name="classPeriodName" class="java.lang.String">
+		<fieldDescription><![CDATA[classPeriodName]]></fieldDescription>
+	</field>
+	<field name="employeeId" class="java.lang.Long">
+		<fieldDescription><![CDATA[employeeId]]></fieldDescription>
+	</field>
+	<field name="startTime" class="java.time.LocalTime">
+		<fieldDescription><![CDATA[startTime]]></fieldDescription>
+	</field>
+	<field name="endTime" class="java.time.LocalTime">
+		<fieldDescription><![CDATA[endTime]]></fieldDescription>
+	</field>
+	<field name="classPeriodId" class="java.lang.Long">
+		<fieldDescription><![CDATA[classPeriodId]]></fieldDescription>
+	</field>
+	<field name="subjectId" class="java.lang.Long">
+		<fieldDescription><![CDATA[subjectId]]></fieldDescription>
+	</field>
+	<field name="subjectName" class="java.lang.String">
+		<fieldDescription><![CDATA[subjectName]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="22">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="15500189-1d46-4e68-b438-40b847084986">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Class Period Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="-1" width="100" height="20" uuid="0e7a297e-83f3-415c-b746-247667af70ac">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subject Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="-1" width="100" height="20" uuid="89f8561c-eae4-4d83-a4a7-dea44e7a5217">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Start Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="-1" width="100" height="20" uuid="dc5b9d8c-a86f-4068-828f-dc5babb0ffb8">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[End Time]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="150" height="20" uuid="f8edfe7c-feee-4e27-9f21-2e4570929d41">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7f3be9e-da4c-4b08-864a-7404f91e2130"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{classPeriodName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="160" height="20" uuid="f28d7d87-c42b-48c4-8889-0d07b9dbd042">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7f3be9e-da4c-4b08-864a-7404f91e2130"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{subjectName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="-2" width="140" height="20" uuid="468241e5-3849-47d1-bd65-605945e9a421">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7f3be9e-da4c-4b08-864a-7404f91e2130"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{startTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="-2" width="100" height="20" uuid="f8909c05-a7b1-4917-807e-724b6eae6b8b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7f3be9e-da4c-4b08-864a-7404f91e2130"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{endTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

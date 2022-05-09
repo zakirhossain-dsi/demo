@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="class_schedule_teacher" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e50c5467-f1db-43ed-b65c-2f38db72dcad">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter2.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="462"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="525"/>
+	<parameter name="subreportParameter" class="net.sf.jasperreports.engine.JasperReport"/>
+
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="shiftId" class="java.lang.Long">
+		<fieldDescription><![CDATA[shiftId]]></fieldDescription>
+	</field>
+	<field name="academicVersionId" class="java.lang.Long">
+		<fieldDescription><![CDATA[academicVersionId]]></fieldDescription>
+	</field>
+	<field name="academicVersionName" class="java.lang.String">
+		<fieldDescription><![CDATA[academicVersionName]]></fieldDescription>
+	</field>
+	<field name="classScheduleDetails" class="java.util.List">
+		<fieldDescription><![CDATA[classScheduleDetails]]></fieldDescription>
+	</field>
+	<field name="classScheduleNameBn" class="java.lang.String">
+		<fieldDescription><![CDATA[classScheduleNameBn]]></fieldDescription>
+	</field>
+	<field name="academicClassName" class="java.lang.String">
+		<fieldDescription><![CDATA[academicClassName]]></fieldDescription>
+	</field>
+	<field name="classSectionName" class="java.lang.String">
+		<fieldDescription><![CDATA[classSectionName]]></fieldDescription>
+	</field>
+	<field name="shiftName" class="java.lang.String">
+		<fieldDescription><![CDATA[shiftName]]></fieldDescription>
+	</field>
+	<field name="classGroupName" class="java.lang.String">
+		<fieldDescription><![CDATA[classGroupName]]></fieldDescription>
+	</field>
+	<field name="classScheduleName" class="java.lang.String">
+		<fieldDescription><![CDATA[classScheduleName]]></fieldDescription>
+	</field>
+	<field name="recordVersion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[recordVersion]]></fieldDescription>
+	</field>
+	<field name="instituteId" class="java.lang.Long">
+		<fieldDescription><![CDATA[instituteId]]></fieldDescription>
+	</field>
+	<field name="classSectionId" class="java.lang.Long">
+		<fieldDescription><![CDATA[classSectionId]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="academicClassId" class="java.lang.Long">
+		<fieldDescription><![CDATA[academicClassId]]></fieldDescription>
+	</field>
+	<field name="day" class="com.iwp.service.enums.Day">
+		<fieldDescription><![CDATA[day]]></fieldDescription>
+	</field>
+	<field name="classGroupId" class="java.lang.Long">
+		<fieldDescription><![CDATA[classGroupId]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="24" width="95" height="21" uuid="4fe46214-389e-4899-a5b2-8d9685728d79"/>
+				<text><![CDATA[Teacher]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="24" width="457" height="21" uuid="52ae957c-f095-4311-bc13-c128e1412771">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + ((com.iwp.service.response.ClassScheduleDetailResponse)$F{classScheduleDetails}.get( 0 )).getEmployeeName()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="136" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="91" width="550" height="40" uuid="cbc067b1-48b1-45f0-b72d-5d5ec6a18067"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{classScheduleDetails})]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{subreportParameter}]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="99" y="0" width="181" height="21" uuid="d91eff1a-2869-47d8-8389-e4a33fd8ebc4"/>
+				<textFieldExpression><![CDATA[": " +$F{academicClassName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="0" width="95" height="21" uuid="ad4721c4-b269-4efe-9157-d56de3d77658"/>
+				<text><![CDATA[Academic Class]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="23" width="180" height="21" uuid="312637f8-8300-41d4-b0bc-9a944391004e"/>
+				<textFieldExpression><![CDATA[": " + $F{academicVersionName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="23" width="95" height="21" uuid="5cb6fbc6-b9b7-4a1e-8200-65b46bac418e"/>
+				<text><![CDATA[Academic Version]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="46" width="180" height="21" uuid="5ce33c63-b601-4056-a4e3-ccc1ecf693ee"/>
+				<textFieldExpression><![CDATA[": " + $F{shiftName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="46" width="95" height="21" uuid="d41fc1a0-2ff3-4001-8d51-af709d54ed63"/>
+				<text><![CDATA[Shift Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="70" width="180" height="21" uuid="cc1c6588-86d5-4d71-b0ec-84b1426b88bd"/>
+				<textFieldExpression><![CDATA[": " + $F{classSectionName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="70" width="95" height="21" uuid="e7b9426f-410f-43b8-8d1e-c3e14299ae65"/>
+				<text><![CDATA[Section Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="394" y="0" width="160" height="21" uuid="f551f193-e0bb-4b45-abb3-c5eb431dbd35"/>
+				<textFieldExpression><![CDATA[": " + $F{classGroupName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="0" width="112" height="21" uuid="873ab2e5-fe0f-412b-b7b2-e89c1a88507b"/>
+				<text><![CDATA[Class Group Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="394" y="25" width="160" height="21" uuid="ccbfeb42-128f-4a96-9bb8-8b29d512db18"/>
+				<textFieldExpression><![CDATA[": " + $F{classScheduleName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="25" width="112" height="21" uuid="6b194f1a-724a-47a9-a7d1-953bbfda6a06"/>
+				<text><![CDATA[Class Schedule Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="394" y="50" width="160" height="21" uuid="385bf080-4d29-47ae-9bb0-b63f41d6bab1"/>
+				<textFieldExpression><![CDATA[": " + $F{day}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="50" width="110" height="21" uuid="89c56061-6d1b-44ab-8902-ad5c608e347a"/>
+				<text><![CDATA[Day]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

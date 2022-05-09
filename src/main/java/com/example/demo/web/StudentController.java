@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,10 +51,10 @@ public class StudentController {
   }
 
   @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Tuple[]> getStudents(@RequestParam Map<String, String> queryParams) {
+  public ResponseEntity<Student[]> getStudents(@RequestParam Map<String, String> queryParams) {
 
     log.info("Got request for students with params: {}", queryParams);
-    Tuple[] students = studentService.getStudentsByQueryParam(queryParams);
+    Student[] students = studentService.getStudentsByQueryParam(queryParams);
     return ResponseEntity.ok(students);
   }
 
@@ -108,5 +109,11 @@ public class StudentController {
             String.format("inline; filename=\"%s\"", file.getFilename()))
         .contentType(MediaType.IMAGE_JPEG)
         .body(file);
+  }
+
+  @GetMapping("/download/teacher-schedule/{studentId}")
+  public String downloadStudentProfile(HttpServletResponse response, @PathVariable Long studentId) {
+
+    return studentService.getStudentProfilePdf(response, studentId);
   }
 }

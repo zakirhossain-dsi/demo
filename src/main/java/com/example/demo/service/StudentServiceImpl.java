@@ -7,18 +7,25 @@ import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
 import com.example.demo.repository.StudentDAO;
+import com.iwp.service.response.Execute;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+
+import java.io.File;
+import java.util.*;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
+
 import lombok.AllArgsConstructor;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 @Service
 @AllArgsConstructor
@@ -51,9 +58,20 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public Tuple[] getStudentsByQueryParam(Map<String, String> queryParams) {
+  public Student[] getStudentsByQueryParam(Map<String, String> queryParams) {
     QStudentEntity student = QStudentEntity.studentEntity;
     NumberPath<Long> count = Expressions.numberPath(Long.class, "c");
+
+    JPAQuery<StudentEntity> query = queryFactory.selectFrom(student);
+
+    if(!StringUtils.isEmpty(queryParams.get("lastName"))){
+      query.where(student.lastName.eq(queryParams.get("lastName").trim()));
+    }
+
+    query.orderBy(student.createDate.asc(), student.email.asc());
+
+    List<StudentEntity> studentEntities = query.fetch();
+    return modelMapper.map(studentEntities, Student[].class);
 
     /*
     List<StudentEntity> studentEntities = queryFactory.selectFrom(student)
@@ -63,6 +81,7 @@ public class StudentServiceImpl implements StudentService {
     return modelMapper.map(studentEntities, Student[].class);
     */
 
+    /*
     List<Tuple> studentEntities =
         queryFactory
             .select(student.lastName, student.studentId.count().as(count))
@@ -71,8 +90,8 @@ public class StudentServiceImpl implements StudentService {
             .where(student.lastName.eq("hossain"))
             .orderBy(count.desc())
             .fetch();
-
-    return modelMapper.map(studentEntities, Tuple[].class);
+    return modelMapper.map(studentEntities, Student[].class);
+    */
   }
 
   @Override
@@ -82,7 +101,7 @@ public class StudentServiceImpl implements StudentService {
     studentEntity = studentDAO.save(studentEntity);
 
     if (!Objects.isNull(student.getCourseRatings())) {
-      studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
+      studentEntity.setCourseRatingList(student.getCourseRatingEntitySet(studentEntity));
       studentEntity = studentDAO.save(studentEntity);
     }
 
@@ -111,7 +130,7 @@ public class StudentServiceImpl implements StudentService {
                     String.format(
                         "Student was not found for parameters {id=%s}", student.getStudentId())));
 
-    studentEntity.setCourseRatings(student.getCourseRatingEntitySet(studentEntity));
+    studentEntity.setCourseRatingList(student.getCourseRatingEntitySet(studentEntity));
 
     studentEntity = studentDAO.save(studentEntity);
 
@@ -138,4 +157,31 @@ public class StudentServiceImpl implements StudentService {
   public List<StudentCourseRating> getStudentCourseRatingsPerStudentId(Long studentId) {
     return studentDAO.findStudentCourseRatingsPerStudentId1(studentId);
   }
+
+  @Override
+  public String getStudentProfilePdf(HttpServletResponse response, Long studentId) {
+
+
+    JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Execute.getData());
+    Map<String, Object> parameters = new HashMap<>();
+
+    try {
+      File mainFile = ResourceUtils.getFile("classpath:teacher_class_schedule.jrxml");
+      JasperReport mainReport = JasperCompileManager.compileReport(mainFile.getAbsolutePath());
+
+      File subFile = ResourceUtils.getFile("classpath:teacher_class_schedule_detail.jrxml");
+      JasperReport subReport = JasperCompileManager.compileReport(subFile.getAbsolutePath());
+      parameters.put("subreportParameter", subReport);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, dataSource);
+      response.setContentType("application/pdf");
+      response.addHeader("Content-disposition", "attachment; filename=teacher_class_schedule.pdf");
+      JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return exception.getMessage();
+    }
+    return "report generated";
+  }
+
 }

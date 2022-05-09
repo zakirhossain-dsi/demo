@@ -19,5 +19,11 @@ http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-confi
    --rm demo-app:v1
 </pre>
 
+<pre>
+    docker run \
+    - p hostPort:containerPort
+    --rm demo-app:v1
+</pre>
+
 # How to format code using git-code-format plugin
 `mvn git-code-format:format-code -Dgcf.globPattern=**/*`
