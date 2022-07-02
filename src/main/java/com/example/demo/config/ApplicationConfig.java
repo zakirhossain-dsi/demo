@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.bean.BeanPostProcessorImpl;
+import com.example.bean.ProductBean;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,5 +24,24 @@ public class ApplicationConfig {
     // EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.example.demo.entity");
     // EntityManager em = emf.createEntityManager();
     return new JPAQueryFactory(em);
+  }
+
+  /*
+    @Bean(name = "beanInstance")
+    public AwareInterfaceImpl beanInstance(){
+      return new AwareInterfaceImpl();
+    }
+  */
+
+  @Bean(name = "productBean",
+          initMethod = "customInit2",
+          destroyMethod = "customDestroy2")
+  public ProductBean productBean() {
+    return new ProductBean();
+  }
+
+  @Bean
+  public BeanPostProcessorImpl beanPostProcessor() {
+    return new BeanPostProcessorImpl();
   }
 }

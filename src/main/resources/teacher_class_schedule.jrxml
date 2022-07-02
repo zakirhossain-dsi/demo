@@ -118,7 +118,7 @@
 			</textField>
 			<staticText>
 				<reportElement x="2" y="70" width="95" height="21" uuid="e7b9426f-410f-43b8-8d1e-c3e14299ae65"/>
-				<text><![CDATA[Section Name]]></text>
+				<text><![CDATA[Section Name বাংলা]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="394" y="0" width="160" height="21" uuid="f551f193-e0bb-4b45-abb3-c5eb431dbd35"/>

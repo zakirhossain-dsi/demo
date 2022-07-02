@@ -2,11 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
-import com.querydsl.core.Tuple;
-
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 
 public interface StudentService {
   Student getStudentById(Long id);

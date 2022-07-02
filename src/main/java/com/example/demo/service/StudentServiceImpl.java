@@ -8,20 +8,18 @@ import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
 import com.example.demo.repository.StudentDAO;
 import com.iwp.service.response.Execute;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.io.File;
 import java.util.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -64,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
 
     JPAQuery<StudentEntity> query = queryFactory.selectFrom(student);
 
-    if(!StringUtils.isEmpty(queryParams.get("lastName"))){
+    if (!StringUtils.isEmpty(queryParams.get("lastName"))) {
       query.where(student.lastName.eq(queryParams.get("lastName").trim()));
     }
 
@@ -161,11 +159,18 @@ public class StudentServiceImpl implements StudentService {
   @Override
   public String getStudentProfilePdf(HttpServletResponse response, Long studentId) {
 
-
     JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Execute.getData());
     Map<String, Object> parameters = new HashMap<>();
 
     try {
+
+      File fontFile = ResourceUtils.getFile("classpath:kalpurush.ttf");
+      JRDesignStyle jrDesignStyle = new JRDesignStyle();
+      jrDesignStyle.setDefault(true);
+      jrDesignStyle.setPdfFontName(fontFile.getAbsolutePath());
+      jrDesignStyle.setPdfEncoding("Identity-H");
+      jrDesignStyle.setPdfEmbedded(true);
+
       File mainFile = ResourceUtils.getFile("classpath:teacher_class_schedule.jrxml");
       JasperReport mainReport = JasperCompileManager.compileReport(mainFile.getAbsolutePath());
 
@@ -173,6 +178,7 @@ public class StudentServiceImpl implements StudentService {
       JasperReport subReport = JasperCompileManager.compileReport(subFile.getAbsolutePath());
       parameters.put("subreportParameter", subReport);
       JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, dataSource);
+      jasperPrint.addStyle(jrDesignStyle);
       response.setContentType("application/pdf");
       response.addHeader("Content-disposition", "attachment; filename=teacher_class_schedule.pdf");
       JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
@@ -183,5 +189,4 @@ public class StudentServiceImpl implements StudentService {
     }
     return "report generated";
   }
-
 }
