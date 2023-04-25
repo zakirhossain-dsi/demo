@@ -17,7 +17,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "CourseRating")
 public class CourseRatingEntity extends BaseEntity {
 
-  @EmbeddedId private CourseRatingKey courseRatingKey;
+  @EmbeddedId
+  private CourseRatingKey courseRatingKey;
 
   public CourseRatingEntity(CourseRatingKey courseRatingKey) {
     this.courseRatingKey = courseRatingKey;

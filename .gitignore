@@ -32,3 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 files
+.DS_Store
+.mvn
+*._*
+mvnw

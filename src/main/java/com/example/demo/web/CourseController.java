@@ -28,7 +28,7 @@ public class CourseController {
   private final CourseService courseService;
   private final StorageService storageService;
 
-  @GetMapping(value = "/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Course> getCourse(@PathVariable Long courseId) {
     log.info("Got request for course id: {}", courseId);
     Course course = courseService.getCourseById(courseId);
