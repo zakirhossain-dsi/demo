@@ -34,6 +34,13 @@ public class StudentController {
   private final StudentService studentService;
   private final StorageService storageService;
 
+  @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> greetings() {
+
+    log.info("Greetings from all students :-)");
+    return ResponseEntity.ok("Hello there!");
+  }
+
   @GetMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Student> getStudent(@PathVariable Long studentId) {
 

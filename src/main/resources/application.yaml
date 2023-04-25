@@ -9,6 +9,18 @@ redis:
   hostName: ${redisHostName:localhost}
   port: ${redisPort:6379}
 
+management:
+  health:
+    elasticsearch:
+      enabled: false
+  endpoint:
+    health:
+      show-details: when_authorized
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /management
 # mandatory database properties
 spring:
   jackson:
@@ -16,7 +28,7 @@ spring:
   datasource:
     url: ${dbURL:jdbc:h2:~/education_management}
     username: ${dbUserName:sa}
-    password: ${dbPassword:admin}
+    password: ${dbPassword:admin123}
     driver-class-name: ${dbDriver:org.h2.Driver}
 
     # optional database properties
