@@ -1,9 +1,9 @@
 package com.example.demo.web;
 
+import com.example.demo.datasource.StudentReportDataSource;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
 import com.example.demo.service.StorageService;
-import com.example.demo.service.StudentDataSource;
 import com.example.demo.service.StudentService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
@@ -131,7 +131,7 @@ public class StudentController {
   @GetMapping("/download/students")
   public String downloadAllStudents(HttpServletResponse response) throws SQLException {
 
-    StudentDataSource studentDataSource = new StudentDataSource(jdbcTemplate);
+    StudentReportDataSource studentDataSource = new StudentReportDataSource(jdbcTemplate);
 
     try(studentDataSource) {
       File reportTemplateFile = ResourceUtils.getFile("classpath:students.jrxml");

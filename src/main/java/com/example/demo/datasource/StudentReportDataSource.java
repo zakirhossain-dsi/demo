@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.datasource;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -13,19 +13,19 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @Slf4j
-public class StudentDataSource implements JRDataSource, AutoCloseable {
+public class StudentReportDataSource implements JRDataSource, AutoCloseable {
 
   private static final int BATCH_SIZE = 5;
   private final PreparedStatement preparedStatement;
-  private final Connection connection;
+  private final Connection databaseConnection;
   private ResultSet resultSet;
   private int currentPage = 0;
 
-  public StudentDataSource(JdbcTemplate jdbcTemplate) throws SQLException {
+  public StudentReportDataSource(JdbcTemplate jdbcTemplate) throws SQLException {
     String sqlQuery = "SELECT * FROM student LIMIT ? OFFSET ?";
     jdbcTemplate.setFetchSize(BATCH_SIZE);
-    connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
-    preparedStatement = connection.prepareStatement(sqlQuery, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+    databaseConnection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
+    preparedStatement = databaseConnection.prepareStatement(sqlQuery, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
     preparedStatement.setInt(1, BATCH_SIZE);
     preparedStatement.setInt(2, currentPage * BATCH_SIZE);
     preparedStatement.setFetchSize(BATCH_SIZE);
@@ -65,7 +65,7 @@ public class StudentDataSource implements JRDataSource, AutoCloseable {
         resultSet.close();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      log.error("Error while closing result set.", e);
     }
 
     try {
@@ -73,15 +73,15 @@ public class StudentDataSource implements JRDataSource, AutoCloseable {
         preparedStatement.close();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      log.error("Error while closing prepared statement.", e);
     }
 
     try {
-      if (connection != null) {
-        connection.close();
+      if (databaseConnection != null) {
+        databaseConnection.close();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      log.error("Error while closing database connection.", e);
     }
   }
 
