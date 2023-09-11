@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.util.ResourceUtils;
 
 public class Execute {
+
   public static void main(String[] args) throws JRException, FileNotFoundException {
 
     JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(getData());

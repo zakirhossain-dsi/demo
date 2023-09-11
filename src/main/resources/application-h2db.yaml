@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: ${serverPort:8080}
 
 logging:
   level:
     root: info
 
 redis:
-  hostName: localhost
-  port: 6379
+  hostName: ${redisHostName:localhost}
+  port: ${redisPort:6379}
 
 management:
   health:
@@ -26,10 +26,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   datasource:
-    url: jdbc:mysql://localhost:3306/education_management
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${dbURL:jdbc:h2:~/education_management}
+    username: ${dbUserName:sa}
+    password: ${dbPassword:admin123}
+    driver-class-name: ${dbDriver:org.h2.Driver}
 
     # optional database properties
     #schema: classpath:schema.sql
@@ -41,7 +41,7 @@ spring:
 
   jpa:
     defer-datasource-initialization: true
-    generate-ddl: true
+    #generate-ddl=true
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -49,7 +49,7 @@ spring:
       javax.persistence.validation.mode: none
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: ${sqlDialect:org.hibernate.dialect.H2Dialect}
   sql:
     init:
       mode: embedded
@@ -57,7 +57,7 @@ spring:
   servlet:
     multipart:
       enabled: true
-      #      location: /uploads
+#      location: /uploads
       max-file-size: 10MB
       max-request-size: 20MB
       resolve-lazily: false

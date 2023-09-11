@@ -1,7 +1,5 @@
 package com.example.demo.config;
 
-import com.example.bean.BeanPostProcessorImpl;
-import com.example.bean.ProductBean;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,15 +31,4 @@ public class ApplicationConfig {
     }
   */
 
-  @Bean(name = "productBean",
-          initMethod = "customInit2",
-          destroyMethod = "customDestroy2")
-  public ProductBean productBean() {
-    return new ProductBean();
-  }
-
-  @Bean
-  public BeanPostProcessorImpl beanPostProcessor() {
-    return new BeanPostProcessorImpl();
-  }
 }

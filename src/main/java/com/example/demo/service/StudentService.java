@@ -18,4 +18,6 @@ public interface StudentService {
   List<StudentCourseRating> getStudentCourseRatingsPerStudentId(Long studentId);
 
   String getStudentProfilePdf(HttpServletResponse response, Long studentId);
+
+  String getStudentsPdf();
 }

@@ -3,21 +3,31 @@ package com.example.demo.web;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
 import com.example.demo.service.StorageService;
+import com.example.demo.service.StudentDataSource;
 import com.example.demo.service.StudentService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.ResourceUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +42,8 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
   private final StudentService studentService;
+  private final JdbcTemplate jdbcTemplate;
+
   private final StorageService storageService;
 
   @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -114,5 +126,23 @@ public class StudentController {
   public String downloadStudentProfile(HttpServletResponse response, @PathVariable Long studentId) {
 
     return studentService.getStudentProfilePdf(response, studentId);
+  }
+
+  @GetMapping("/download/students")
+  public String downloadAllStudents(HttpServletResponse response) throws SQLException {
+
+    StudentDataSource studentDataSource = new StudentDataSource(jdbcTemplate);
+
+    try(studentDataSource) {
+      File reportTemplateFile = ResourceUtils.getFile("classpath:students.jrxml");
+      JasperReport compiledReport  = JasperCompileManager.compileReport(reportTemplateFile.getAbsolutePath());
+      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport , null, studentDataSource);
+      JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+
+    }catch (IOException | JRException ex){
+      ex.printStackTrace();
+    }
+
+    return studentService.getStudentsPdf();
   }
 }
