@@ -1,6 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.datasource.StudentReportDataSource;
+import com.example.demo.datasource.ReportBuilder;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
 import com.example.demo.service.StorageService;
@@ -10,13 +10,12 @@ import com.example.demo.validation.group.OnUpdate;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +42,14 @@ public class StudentController {
 
   private final StudentService studentService;
   private final JdbcTemplate jdbcTemplate;
-
+  private final List<ReportBuilder> reportBuilders;
+  private Map<String, ReportBuilder> reportCodeToDS;
   private final StorageService storageService;
+
+  @PostConstruct
+  public void setup(){
+    reportCodeToDS = reportBuilders.stream().collect(Collectors.toMap(ReportBuilder::getReportCode, ds -> ds));
+  }
 
   @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> greetings() {
@@ -131,15 +136,15 @@ public class StudentController {
   @GetMapping("/download/students")
   public String downloadAllStudents(HttpServletResponse response) throws SQLException {
 
-    StudentReportDataSource studentDataSource = new StudentReportDataSource(jdbcTemplate);
+    ReportBuilder dataSource = reportCodeToDS.get("MLFF_DAILY_VIOLATION"); //new SampleReportDataSource(jdbcTemplate);
 
-    try(studentDataSource) {
+    try(dataSource) {
       File reportTemplateFile = ResourceUtils.getFile("classpath:students.jrxml");
       JasperReport compiledReport  = JasperCompileManager.compileReport(reportTemplateFile.getAbsolutePath());
-      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport , null, studentDataSource);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport , null, dataSource);
       JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 
-    }catch (IOException | JRException ex){
+    }catch (Exception ex){
       ex.printStackTrace();
     }
 

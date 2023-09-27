@@ -1,10 +1,10 @@
 package com.example.demo.datasource;
 
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,8 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @Slf4j
-public class StudentReportDataSource implements JRDataSource, AutoCloseable {
+@Component
+public class SampleReportBuilder implements ReportBuilder {
 
   private static final int BATCH_SIZE = 5;
   private final PreparedStatement preparedStatement;
@@ -21,7 +22,7 @@ public class StudentReportDataSource implements JRDataSource, AutoCloseable {
   private ResultSet resultSet;
   private int currentPage = 0;
 
-  public StudentReportDataSource(JdbcTemplate jdbcTemplate) throws SQLException {
+  public SampleReportBuilder(JdbcTemplate jdbcTemplate) throws SQLException {
     String sqlQuery = "SELECT * FROM student LIMIT ? OFFSET ?";
     jdbcTemplate.setFetchSize(BATCH_SIZE);
     databaseConnection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
@@ -85,4 +86,8 @@ public class StudentReportDataSource implements JRDataSource, AutoCloseable {
     }
   }
 
+  @Override
+  public String getReportCode() {
+    return "MLFF_DAILY_VIOLATION";
+  }
 }
