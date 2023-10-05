@@ -150,4 +150,12 @@ public class StudentController {
 
     return studentService.getStudentsPdf();
   }
+
+  @GetMapping("/test/cross-join")
+  public String testCrossJoin() {
+    List<Object[]> records = studentService.performJoinQuery();
+    System.out.println(records.size());
+
+    return "";
+  }
 }

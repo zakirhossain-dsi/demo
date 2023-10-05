@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @Slf4j
-@Component
+// @Component
 public class SampleReportBuilder implements ReportBuilder {
 
   private static final int BATCH_SIZE = 5;

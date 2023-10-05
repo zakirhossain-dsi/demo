@@ -6,7 +6,7 @@ import com.example.demo.entity.StudentEntity;
 import com.example.demo.model.ModelType;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
-import com.example.demo.repository.StudentDAO;
+import com.example.demo.db1.repository.StudentDAO;
 import com.iwp.service.response.Execute;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -35,6 +37,12 @@ public class StudentServiceImpl implements StudentService {
   private final StorageProperties storageProperties;
   private final RedisService cacheService;
   private final JPAQueryFactory queryFactory;
+
+  @Qualifier("db2DataSource")
+  private final JdbcTemplate jdbcTemplate;
+
+//  @PersistenceContext
+//  private EntityManager entityManager;
 
   @Override
   public Student getStudentById(Long id) {
@@ -189,6 +197,23 @@ public class StudentServiceImpl implements StudentService {
     }
     return "report generated";
   }
+
+  public List<Object[]> performJoinQuery() {
+/*
+    String jpqlQuery = "SELECT student.firstName, course.name " +
+            "FROM Student student " +
+            "INNER JOIN CourseRating courseRating ON courseRating.courseRatingKey.studentEntity.studentId = student.studentId" +
+            "INNER JOIN Course course ON course.courseId = courseRating.courseRatingKey.courseEntity.courseId";
+*/
+
+      String jpqlQuery = "SELECT student.firstName FROM Student";
+
+      // TypedQuery<Object[]> query = entityManager.createQuery(jpqlQuery, Object[].class);
+
+//    return query.getResultList();
+    return null;
+  }
+
 
   @Override
   public String getStudentsPdf() {

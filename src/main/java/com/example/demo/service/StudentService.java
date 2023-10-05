@@ -20,4 +20,6 @@ public interface StudentService {
   String getStudentProfilePdf(HttpServletResponse response, Long studentId);
 
   String getStudentsPdf();
+
+  List<Object[]> performJoinQuery();
 }

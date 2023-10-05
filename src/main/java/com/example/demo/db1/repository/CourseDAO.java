@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.example.demo.db1.repository;
 
 import com.example.demo.entity.CourseEntity;
 import java.util.Optional;

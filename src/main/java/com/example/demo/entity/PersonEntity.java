@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import javax.persistence.*;
+
+import com.example.demo.entity.BaseEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
