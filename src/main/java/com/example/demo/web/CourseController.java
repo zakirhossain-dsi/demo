@@ -1,8 +1,8 @@
 package com.example.demo.web;
 
+import com.example.demo.db1.service.CourseService;
+import com.example.demo.db1.service.StorageService;
 import com.example.demo.model.Course;
-import com.example.demo.service.CourseService;
-import com.example.demo.service.StorageService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,8 +1,7 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import java.util.Set;
 import javax.persistence.*;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @DynamicInsert
 @Entity
-@Table(name = "course")
+@Table(name = "course", schema = "db1")
 public class CourseEntity extends BaseEntity {
 
   @Id

@@ -1,10 +1,10 @@
 package com.example.demo.model;
 
 import com.example.demo.annotation.MultipartFileValid;
-import com.example.demo.entity.CourseEntity;
-import com.example.demo.entity.CourseRatingEntity;
-import com.example.demo.entity.CourseRatingKey;
-import com.example.demo.entity.StudentEntity;
+import com.example.demo.db1.entity.CourseEntity;
+import com.example.demo.db1.entity.CourseRatingEntity;
+import com.example.demo.db1.entity.CourseRatingKey;
+import com.example.demo.db1.entity.StudentEntity;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonFormat;

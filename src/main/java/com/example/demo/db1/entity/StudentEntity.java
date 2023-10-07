@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import com.example.demo.enums.StudentType;
 import com.example.demo.model.StudentCourseRating;
@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @DynamicInsert
 @Entity
-@Table(name = "student")
+@Table(name = "student", schema = "db1")
 @SqlResultSetMapping(
     name = "studentCourseRatingsPerStudentId",
     classes =

@@ -24,7 +24,8 @@ public class ApplicationConfig {
 
   @Bean
   public JPAQueryFactory queryFactory() {
-     EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.example.demo.entity");
+    EntityManagerFactory emf =
+        Persistence.createEntityManagerFactory("com.example.demo.db1.entity");
     return new JPAQueryFactory(emf.createEntityManager());
   }
 

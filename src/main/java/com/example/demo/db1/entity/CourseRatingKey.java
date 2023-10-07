@@ -1,11 +1,10 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,10 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.db1.service;
 
 import com.example.demo.config.StorageProperties;
-import com.example.demo.entity.CourseEntity;
+import com.example.demo.db1.entity.CourseEntity;
+import com.example.demo.db1.repository.CourseDAO;
 import com.example.demo.model.Course;
 import com.example.demo.model.ModelType;
-import com.example.demo.db1.repository.CourseDAO;
 import java.util.Objects;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.db1.service;
 
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;

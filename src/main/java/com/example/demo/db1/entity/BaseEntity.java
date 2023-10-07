@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import java.util.Date;
 import javax.persistence.*;

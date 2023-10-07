@@ -1,10 +1,9 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @DynamicInsert
 @Entity
-@Table(name = "CourseRating")
+@Table(name = "CourseRating", schema = "db1")
 public class CourseRatingEntity extends BaseEntity {
 
   @EmbeddedId private CourseRatingKey courseRatingKey;

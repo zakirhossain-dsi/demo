@@ -1,16 +1,16 @@
 package com.example.demo.db1.repository;
 
-import com.example.demo.entity.StudentEntity;
+import com.example.demo.db1.entity.StudentEntity;
 import com.example.demo.model.StudentCourseRating;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudentDAO extends CrudRepository<StudentEntity, Long> {
+public interface StudentDAO extends JpaRepository<StudentEntity, Long> {
 
   Optional<StudentEntity> findByEmail(String email);
 

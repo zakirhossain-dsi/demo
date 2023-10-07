@@ -1,14 +1,13 @@
 package com.example.demo.web;
 
 import com.example.demo.datasource.ReportBuilder;
+import com.example.demo.db1.service.StorageService;
+import com.example.demo.db1.service.StudentService;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
-import com.example.demo.service.StorageService;
-import com.example.demo.service.StudentService;
 import com.example.demo.validation.group.OnCreate;
 import com.example.demo.validation.group.OnUpdate;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
@@ -47,8 +46,9 @@ public class StudentController {
   private final StorageService storageService;
 
   @PostConstruct
-  public void setup(){
-    reportCodeToDS = reportBuilders.stream().collect(Collectors.toMap(ReportBuilder::getReportCode, ds -> ds));
+  public void setup() {
+    reportCodeToDS =
+        reportBuilders.stream().collect(Collectors.toMap(ReportBuilder::getReportCode, ds -> ds));
   }
 
   @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -136,15 +136,17 @@ public class StudentController {
   @GetMapping("/download/students")
   public String downloadAllStudents(HttpServletResponse response) throws SQLException {
 
-    ReportBuilder dataSource = reportCodeToDS.get("MLFF_DAILY_VIOLATION"); //new SampleReportDataSource(jdbcTemplate);
+    ReportBuilder dataSource =
+        reportCodeToDS.get("MLFF_DAILY_VIOLATION"); // new SampleReportDataSource(jdbcTemplate);
 
-    try(dataSource) {
+    try (dataSource) {
       File reportTemplateFile = ResourceUtils.getFile("classpath:students.jrxml");
-      JasperReport compiledReport  = JasperCompileManager.compileReport(reportTemplateFile.getAbsolutePath());
-      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport , null, dataSource);
+      JasperReport compiledReport =
+          JasperCompileManager.compileReport(reportTemplateFile.getAbsolutePath());
+      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, null, dataSource);
       JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 
-    }catch (Exception ex){
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
 

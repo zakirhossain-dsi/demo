@@ -1,15 +1,13 @@
-package com.example.demo.entity;
+package com.example.demo.db1.entity;
 
 import javax.persistence.*;
-
-import com.example.demo.entity.BaseEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "person")
+@Table(name = "person", schema = "db1")
 public class PersonEntity extends BaseEntity {
 
   @Id
