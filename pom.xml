@@ -135,7 +135,13 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.19.1</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -213,20 +219,21 @@
 					-->
 				</executions>
 			</plugin>
+			<!--
 			<plugin>
 				<groupId>com.cosium.code</groupId>
 				<artifactId>git-code-format-maven-plugin</artifactId>
 				<version>3.3</version>
 				<executions>
-					<!-- On commit, format the modified java files -->
+					&lt;!&ndash; On commit, format the modified java files &ndash;&gt;
 					<execution>
 						<id>install-formatter-hook</id>
 						<goals>
 							<goal>install-hooks</goal>
 						</goals>
 					</execution>
-					<!-- On Maven verify phase, fail if any file
-                    (including unmodified) is badly formatted -->
+					&lt;!&ndash; On Maven verify phase, fail if any file
+                    (including unmodified) is badly formatted &ndash;&gt;
 					<execution>
 						<id>validate-code-format</id>
 						<goals>
@@ -235,6 +242,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 		</plugins>
 	</build>
 

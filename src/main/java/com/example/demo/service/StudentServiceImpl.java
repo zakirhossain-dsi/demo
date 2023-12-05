@@ -13,20 +13,29 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.IntStream;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class StudentServiceImpl implements StudentService {
 
   private final StudentDAO studentDAO;
@@ -35,6 +44,7 @@ public class StudentServiceImpl implements StudentService {
   private final StorageProperties storageProperties;
   private final RedisService cacheService;
   private final JPAQueryFactory queryFactory;
+  private final JdbcTemplate jdbcTemplate;
 
   @Override
   public Student getStudentById(Long id) {
@@ -193,6 +203,53 @@ public class StudentServiceImpl implements StudentService {
   @Override
   public String getStudentsPdf() {
     return "";
+  }
+
+  @Override
+  public Map<String, Object> getStudentAsMapByID(Long id) {
+
+    String sqlQuery = "SELECT first_name FROM student WHERE student_id = " + id;
+
+    Connection databaseConnection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+
+    try {
+      databaseConnection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
+      preparedStatement = databaseConnection.prepareStatement(sqlQuery, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+      resultSet = preparedStatement.executeQuery();
+      val metadata = resultSet.getMetaData();
+      System.out.println(metadata.getColumnLabel(1));
+      System.out.println(resultSet.findColumn("first_name"));
+
+    } catch (SQLException exception) {
+      log.error(exception.getMessage());
+    }finally {
+      try {
+        if (resultSet != null) {
+          resultSet.close();
+        }
+      } catch (SQLException e) {
+        log.error("Error while closing result set.", e);
+      }
+
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        log.error("Error while closing prepared statement.", e);
+      }
+
+      try {
+        if (databaseConnection != null) {
+          databaseConnection.close();
+        }
+      } catch (SQLException e) {
+        log.error("Error while closing database connection.", e);
+      }
+    }
+    return null;
   }
 
 }

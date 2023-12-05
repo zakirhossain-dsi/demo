@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentCourseRating;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
@@ -20,4 +22,6 @@ public interface StudentService {
   String getStudentProfilePdf(HttpServletResponse response, Long studentId);
 
   String getStudentsPdf();
+
+  Map<String, Object> getStudentAsMapByID(Long id);
 }
