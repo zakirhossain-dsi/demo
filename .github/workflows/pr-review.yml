@@ -60,7 +60,11 @@ jobs:
             ]
           # Wires up the GitHub MCP server so the agent can open a pending review,
           # attach inline comments to specific lines, and submit it.
-          # "tools": {"core": []} disables the CLI's local file-write and shell tools.
+          #
+          # Built-in tools are deliberately left unrestricted. "tools": {"core": [...]}
+          # is an allowlist, so an empty array disables everything — including
+          # activate_skill, which the extension needs to load its bundled
+          # code-review-commons skill before it can do any work at all.
           settings: |
             {
               "model": { "maxSessionTurns": 25 },
@@ -79,8 +83,7 @@ jobs:
                   ],
                   "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
                 }
-              },
-              "tools": { "core": [] }
+              }
             }
           prompt: /pr-code-review
 
