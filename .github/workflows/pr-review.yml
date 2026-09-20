@@ -1,0 +1,114 @@
+name: AI pull request review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    # Secrets are withheld from fork PRs, so the agent cannot authenticate there.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-ai-review')
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # full history so the agent can diff against the base branch
+
+      # The extension takes custom criteria only through ADDITIONAL_CONTEXT — it never
+      # reads the workspace, and "tools": {"core": []} below removes file reading anyway.
+      - name: Load review guidelines
+        run: |
+          {
+            echo 'ADDITIONAL_CONTEXT<<GUIDELINES_EOF'
+            cat .github/gemini-review-guidelines.md
+            echo
+            echo 'Prefix every inline comment with exactly one severity tag:'
+            echo '[Critical], [High], [Medium] or [Low], using the severity'
+            echo 'definitions above. The tag must be the first thing in the'
+            echo 'comment body. CI gates on the [Critical] tag.'
+            echo 'GUIDELINES_EOF'
+          } >> "$GITHUB_ENV"
+
+      - name: Gemini review
+        uses: google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489 # v0.1.22
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_CLI_TRUST_WORKSPACE: 'true'
+          # The extension reads these two; the action's github_pr_number input
+          # sets GH_PR_NUMBER, which is a different variable.
+          REPOSITORY: ${{ github.repository }}
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          gemini_model: gemini-3.8-flash
+          github_pr_number: ${{ github.event.pull_request.number }}
+          gemini_debug: true   # TODO: remove once the gate is confirmed working
+          # Must be a JSON array: the action installs these via `jq -r '.[]'`.
+          extensions: |
+            [
+              "https://github.com/gemini-cli-extensions/code-review"
+            ]
+          # Wires up the GitHub MCP server so the agent can open a pending review,
+          # attach inline comments to specific lines, and submit it.
+          #
+          # Built-in tools are deliberately left unrestricted. "tools": {"core": [...]}
+          # is an allowlist, so an empty array disables everything — including
+          # activate_skill, which the extension needs to load its bundled
+          # code-review-commons skill before it can do any work at all.
+          settings: |
+            {
+              "model": { "maxSessionTurns": 25 },
+              "mcpServers": {
+                "github": {
+                  "command": "docker",
+                  "args": [
+                    "run", "-i", "--rm",
+                    "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+                    "ghcr.io/github/github-mcp-server:v0.27.0"
+                  ],
+                  "includeTools": [
+                    "add_comment_to_pending_review",
+                    "pull_request_read",
+                    "pull_request_review_write"
+                  ],
+                  "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
+                }
+              }
+            }
+          prompt: /pr-code-review
+
+      # The extension hardcodes the review event to COMMENT, so the review state is
+      # never CHANGES_REQUESTED. Gate on the severity tags in its comments instead.
+      - name: Gate on critical findings
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          review_id=$(gh api "repos/$REPO/pulls/$PR/reviews" \
+            --jq '[.[] | select(.user.type == "Bot")] | last | .id // empty')
+          if [ -z "$review_id" ]; then
+            echo "::warning::No AI review found; treating as advisory."
+            exit 0
+          fi
+
+          # Scoped to this review: /pulls/$PR/comments would include every past run.
+          critical=$(gh api "repos/$REPO/pulls/$PR/reviews/$review_id/comments" \
+            --jq '[.[] | select(.body | test("^\\s*\\[Critical\\]"; "i"))] | length')
+          echo "Review $review_id — critical findings: $critical"
+
+          if [ "$critical" -gt 0 ]; then
+            echo "::error::$critical critical finding(s). See the inline PR comments."
+            exit 1
+          fi
