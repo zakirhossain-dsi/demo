@@ -61,6 +61,4 @@ public class CourseController {
 
     return ResponseEntity.ok(courseService.updateCourse(course));
   }
-
-
 }
