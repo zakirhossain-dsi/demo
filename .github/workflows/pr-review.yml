@@ -28,12 +28,16 @@ jobs:
         uses: google-github-actions/run-gemini-cli@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_CLI_TRUST_WORKSPACE: 'true'
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           gemini_model: gemini-3.8-flash
           github_pr_number: ${{ github.event.pull_request.number }}
+          # Must be a JSON array: the action installs these via `jq -r '.[]'`.
           extensions: |
-            https://github.com/gemini-cli-extensions/code-review
+            [
+              "https://github.com/gemini-cli-extensions/code-review"
+            ]
           # Wires up the GitHub MCP server so the agent can open a pending review,
           # attach inline comments to specific lines, and submit it.
           # "tools": {"core": []} disables the CLI's local file-write and shell tools.
