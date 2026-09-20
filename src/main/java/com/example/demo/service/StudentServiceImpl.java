@@ -67,28 +67,18 @@ public class StudentServiceImpl implements StudentService {
 
   @Override
   public Student[] getStudentsByQueryParam(Map<String, String> queryParams) {
-    String lastName = queryParams.get("lastName");
+    QStudentEntity student = QStudentEntity.studentEntity;
+    NumberPath<Long> count = Expressions.numberPath(Long.class, "c");
 
-    String sql = "SELECT * FROM student";
-    if (!StringUtils.isEmpty(lastName)) {
-      sql = sql + " WHERE last_name = '" + lastName.trim() + "'";
+    JPAQuery<StudentEntity> query = queryFactory.selectFrom(student);
+
+    if (!StringUtils.isEmpty(queryParams.get("lastName"))) {
+      query.where(student.lastName.eq(queryParams.get("lastName").trim()));
     }
-    sql = sql + " ORDER BY create_date ASC, email ASC";
 
-    log.info("Executing student search query: {}", sql);
+    query.orderBy(student.createDate.asc(), student.email.asc());
 
-    List<StudentEntity> studentEntities =
-        jdbcTemplate.query(
-            sql,
-            (rs, rowNum) -> {
-              StudentEntity entity = new StudentEntity();
-              entity.setStudentId(rs.getLong("student_id"));
-              entity.setFirstName(rs.getString("first_name"));
-              entity.setLastName(rs.getString("last_name"));
-              entity.setEmail(rs.getString("email"));
-              return entity;
-            });
-
+    List<StudentEntity> studentEntities = query.fetch();
     return modelMapper.map(studentEntities, Student[].class);
 
     /*
